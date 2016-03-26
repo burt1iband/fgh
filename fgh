@@ -1,0 +1,58 @@
+#!/bin/bash
+## FGH: Fluxable GUI Helper, by B.H.
+## FGH is a frontend to acpi and various system commands that fills in
+## some of the gaps in accessibility in graphical environments.
+## Set some defaults
+#TITLE=""
+
+## Are we running fgh from a graphicl environment?
+## Test and set display method accordingly.
+     if [[ `pstree -As $$ | grep xinit | wc -l` == 1 ]]; then
+CMD="yad --no-buttons --selectable-labels --timeout 5 --text"
+     else
+CMD="echo"
+     fi
+ 
+## Parse commandline options
+while getopts ":bBhHintooooooooooooooooooooooooooTv123" opt; do
+case $opt in
+1)
+CMD="echo"
+;;
+2)
+CMD="yad $TITLE --no-buttons --selectable-labels --timeout 5 --text"
+;;
+3)
+CMD="notify-send"
+
+;;
+b)
+DATA="$(acpi -b)"
+;;
+B)
+DATA="$(acpi -i)"
+;;
+H)
+DATA="$(uptime -p && last reboot|head -n 3)"
+;;
+i)
+DATA="External $(curl -s ipinfo.io|head -n 2|tail -n 1)"
+ip addr|grep inet[^1-9]|sed 's/inet//'
+#echo "External $(curl -s ipinfo.io|head -n 2|tail -n 1)" > /tmp/fgh.txt
+#DATA="$(cat /tmp/fgh.txt)"
+;;
+t)
+CMD='yad --title "The Time Is" --no-buttons --selectable-labels --timeout 15 --text'
+DATA="$(date +'%H\:%M')"
+ ;;
+T)
+DATA="$(acpi -t)"
+;;
+?)
+notify-send "$1 is not a valid FGH option/Type fgh -h to learn more"
+;;
+esac
+done
+
+$CMD "$DATA"
+exit=0

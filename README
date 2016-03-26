@@ -1,0 +1,19 @@
+*** This is the README for fgh, the Fluxable GUI Helper.
+FGH is designed to fill-in some of the gaps in and rough edges of accessibility in some window managers and light weight graphicl desktops. 
+Even the most accessible graphicl environments may suffer from accessibility regressions, so this tool is designed to be as distro/desktop agnostic as 
+practical. 
+FGH also provides some information not available in panel applets and indicators as far as I know. 
+While FGH is primarily designed to be used with keyboard shortcuts in a GUI it can be used in a pure CLI environment, i.e. from a shell prompt in a 
+log-in tty.
+Originally I was using several mini--scripts to give me information not presented accessily in fluxbox. I was getting requests for aditional 
+mini-scripts, and I was considering adding some fuctionality to the ones I already had. This conbination of needs made it a no brainer to combine 
+existing and proposed bits in to a single tool that would manage the retrieval  and display of a variety of information about both hard and software.
+The sky is the limit, but the point of fgh is to access and present snippits, generally one or two lines, one or two data.
+Fornow fgh is called with one option specifying what information is desired. Optionally a 2nd option can be combined to specify a display method to 
+override the default.
+The first option type uses letters to specify what is to be querried, and optionally the 2nd is a number that specifies the display mode.
+Options do not take any arguments at this time.
+
+
+     
+
