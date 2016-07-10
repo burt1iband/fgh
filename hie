@@ -1,0 +1,75 @@
+#!/bin/bash
+## hie, host_info, internal, external
+## by BH, 09/07/2016
+
+## Set default values
+DaFi="/tmp/hie.inf"
+dts="$(date)"
+ts="$(date '+%T')"
+
+## Check on who and where you are
+chk() {
+## Write requested data to tmp file
+hostname > $DaFi
+     if [ -n "$dat1" ]; then
+echo "$dat1" >> "$DaFi"
+     fi
+     if [ -n "$dat2" ]; then
+echo "$dat2" >> "$DaFi"
+     fi
+echo "LAN-IP: $(hostname -i)" >> $DaFi
+curl -s 'ipinfo.io'|tail -n +2|head -1|sed 's/ip/EXT-IP/; s/[",]//g' >> $DaFi
+}
+
+## Parse command line options
+while getopts ":a:htTu" opt; do
+case $opt in
+a)
+cmd="ap"
+of="$OPTARG"
+;;
+e)
+cmd="exp"
+of="$OPTARG"
+;;
+h)
+echo 'HIE gets your hostname, internal and external IPs, and
+     optionally other information.
+By default retrieved data is written to stdout.
+
+Options:
+     -a append data to a file: any other options must come first
+          A filename is the required argument.
+     -e export, same as -a except if file exists it is overwritten:
+          filename is the required argument. 
+     -h help, shows this message and exit.
+
+     -t timestamp is added to data set
+     -T Time and date are added to data.
+     -u user(s) that are logged in are added above IPs. 
+'
+;;
+t)
+dat1="$ts" 
+;;
+T)
+dat1="$dts"
+;;
+u)
+dat2="$(w -s|cut -d ' ' -f1|sort -u|sed '/USER/d; /^$/d')"
+;;
+esac
+done
+chk
+cat "$DaFi"
+wait
+## aAppend or copy info to a file if selected 
+if [[ "$cmd" = "ap" ]]; then
+cat ${DaFi}|tail -n +1 >> $of
+exit 0
+elif [[ "$cmd" = "exp" ]]; then 
+cp $DaFi $of
+exit 0
+else
+exit=0
+fi
